@@ -170,10 +170,11 @@ button:focus-visible,
   scroll-margin-top: 76px;
 }
 
-/* "3 Golpes Mais Comuns" cards: light accent tint, no border, one reserved alert badge */
+/* "Os Golpes Mais Comuns" cards: light accent tint, no border, centered text, one reserved alert badge */
 #golpes article {
   position: relative;
   background-color: var(--color-accent-tint);
+  text-align: center;
 }
 
 #golpes article h3 {
