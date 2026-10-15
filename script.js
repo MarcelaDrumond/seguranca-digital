@@ -135,7 +135,13 @@ const quizQuestions = [
   }
 ];
 
+// Links de incorporação do Google Forms (Forms → Enviar → aba <> → copiar o src do iframe).
+// Se ficar vazio, a seção correspondente permanece escondida.
+// Feedback "Isso te ajudou?", exibido depois do resultado do quiz:
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScNQ84nR5Y7m5ts7Rpbnsi8Mkkp4A6e2KvmHRF_ASExPvfwgw/viewform?embedded=true';
+// Relato anônimo "Conhece alguém que já caiu em um golpe?", sempre visível quando preenchido.
+// O formulário deve ser ANÔNIMO (sem coletar e-mail e sem exigir login do Google).
+const GOOGLE_FORM_RELATO_URL = '';
 
 let perguntaAtual = 0;
 let pontuacao = 0;
@@ -299,14 +305,19 @@ function salvarResultadoLocalStorage() {
   } catch (e) {}
 }
 
-function mostrarFeedbackSeConfigurado() {
-  if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL === '[FORM_URL_AQUI]') return;
-  const secao = document.getElementById('feedback');
-  const container = document.getElementById('feedback-iframe-container');
+// Monta o iframe de um Google Form dentro de `containerId` e mostra a seção `secaoId`.
+// Se a URL estiver vazia, não faz nada: a seção continua escondida.
+function mostrarFormulario(secaoId, containerId, url, titulo) {
+  if (!url || !url.trim()) return;
+  if (!url.startsWith('https://docs.google.com/forms/')) {
+    console.warn('A URL do formulário deveria ser o link de incorporação do Google Forms (https://docs.google.com/forms/...). Recebido:', url);
+  }
+  const secao = document.getElementById(secaoId);
+  const container = document.getElementById(containerId);
   if (container.childElementCount === 0) {
     const iframe = document.createElement('iframe');
-    iframe.src = GOOGLE_FORM_URL;
-    iframe.title = 'Formulário de feedback';
+    iframe.src = url;
+    iframe.title = titulo;
     iframe.width = '100%';
     iframe.height = '520';
     iframe.loading = 'lazy';
@@ -326,7 +337,7 @@ function mostrarResultado() {
   resultado.hidden = false;
   document.getElementById('resultado-mensagem').textContent = getMensagemResultado(pontuacao);
   salvarResultadoLocalStorage();
-  mostrarFeedbackSeConfigurado();
+  mostrarFormulario('feedback', 'feedback-iframe-container', GOOGLE_FORM_URL, 'Formulário de feedback');
   rolarPara(resultado, document.querySelector('#resultado h2'));
 }
 
@@ -345,6 +356,7 @@ document.getElementById('quiz-refazer').addEventListener('click', reiniciarQuiz)
 
 document.getElementById('quiz-total-perguntas').textContent = quizQuestions.length;
 renderPergunta();
+mostrarFormulario('relato', 'relato-iframe-container', GOOGLE_FORM_RELATO_URL, 'Formulário anônimo para relatar um golpe');
 
 // Modo acessibilidade (texto grande + alto contraste)
 const toggleAcessibilidade = document.getElementById('toggle-acessibilidade');
