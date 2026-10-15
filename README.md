@@ -167,5 +167,5 @@ Projeto de Extensão ADS — **Universidade Anhembi Morumbi**
 
 ## 📄 Licença
 
-Projeto de uso educativo e gratuito. Sinta-se livre pra adaptar para sua própria
-instituição ou iniciativa social.
+Distribuído sob a [Licença MIT](LICENSE). Projeto de uso educativo e gratuito:
+sinta-se livre para adaptar para a sua própria instituição ou iniciativa social.
