@@ -68,9 +68,10 @@ Um **Projeto de Extensão** do curso de Análise e Desenvolvimento de Sistemas (
 - Compartilhamento direto com um familiar ou amigo pelo WhatsApp
 
 **Para quem organiza o projeto**
-- Contador de visitas opcional no rodapé e contagem anônima de quizzes concluídos, com o
+- Contador de visitas opcional no rodapé, contagem anônima de quizzes concluídos e de
+  acertos por pergunta, e acessos por QR separados por informativo, com o
   [GoatCounter](https://www.goatcounter.com) — sem cookies e sem dados pessoais (veja
-  [Configuração](#️-configuração))
+  [Configuração](#️-configuração) e [Indicadores](#-indicadores-do-projeto))
 
 Tudo isso rodando **100% no navegador** — sem servidor, sem banco de dados, sem custo
 de hospedagem. As estatísticas do GoatCounter são opcionais: sem configurá-las, a página
@@ -167,12 +168,74 @@ O que passa a acontecer:
 - Cada visita é contada, e o rodapé mostra "N visitas ao site". O número não é em tempo
   real: o GoatCounter guarda a resposta em cache por algumas horas. Se o contador falhar
   (ou ainda não houver visitas), o rodapé simplesmente não mostra nada.
-- Cada quiz concluído vira um evento anônimo chamado `quiz-concluido`, que aparece só no
-  painel do GoatCounter. Nenhuma pontuação nem dado da pessoa é enviado.
+- Cada quiz concluído (`quiz-concluido`) e cada primeira resposta (`pergunta-N-acerto` ou
+  `pergunta-N-erro`) viram eventos anônimos. O painel do GoatCounter mostra só os totais:
+  não mostra quem respondeu nem a pontuação de cada pessoa.
 - As respostas dos formulários não passam pelo GoatCounter: você as vê na aba
   **Respostas** de cada Google Form.
 
 Se a constante ficar vazia, nenhum script externo é carregado e o rodapé não muda.
+
+## 📊 Indicadores do projeto
+
+Nem tudo precisa passar pelo site. O que acontece em campo fica numa planilha; o que
+acontece no site vem do GoatCounter e do formulário de feedback:
+
+| Indicador | Onde medir | Como |
+|---|---|---|
+| Entrevistas | Planilha | Uma linha por entrevista (data, local, perfil, resumo) |
+| Informativos instalados | Planilha | Um código por informativo (INF-01, INF-02…) e a data de instalação |
+| Visitas ao site | GoatCounter | Total de visitas no painel (e no rodapé da página) |
+| Acessos pelo QR | GoatCounter | Um QR com endereço próprio para cada informativo (abaixo) |
+| Quizzes concluídos | GoatCounter | Evento `quiz-concluido` |
+| Acertos no quiz | GoatCounter | Eventos `pergunta-N-acerto` e `pergunta-N-erro` (abaixo) |
+| "Aprendi algo novo" | Formulário de feedback | Pergunta no Google Forms (abaixo) |
+
+### Um QR para cada informativo
+
+Cada QR deve apontar para o endereço do site com o código do informativo:
+
+```
+https://marceladrumond.github.io/seguranca-digital/?utm_campaign=INF-01&utm_source=qr
+```
+
+Troque `INF-01` pelo código de cada informativo. No painel do GoatCounter, o widget de
+campanhas (**Campaigns**) mostra quantos acessos veio de cada um.
+
+- **Defina os endereços antes de imprimir.** Um QR já impresso com o endereço simples não
+  dá para separar depois.
+- Teste o endereço com um acesso seu e confira se a campanha aparece no painel antes de
+  mandar imprimir.
+- O botão de WhatsApp sempre compartilha o endereço **sem** esses parâmetros, para que
+  quem entra pelo link compartilhado não seja contado como acesso de QR.
+- O site registra todas as visitas na mesma página, com ou sem parâmetros, então o
+  contador do rodapé soma também os acessos por QR.
+
+### Acertos no quiz
+
+Só a **primeira tentativa** de cada pergunta é registrada: quem erra e refaz já aprendeu
+com o feedback, e a nova resposta não mede o que a pessoa sabia antes. A pontuação mostrada
+na tela continua contando o acerto final.
+
+A taxa de acerto de uma pergunta é `acertos ÷ (acertos + erros)`. Os eventos aparecem na
+lista de eventos do painel do GoatCounter, com o tema da pergunta como título.
+
+### "Aprendi algo novo"
+
+O formulário de feedback é editado direto no Google Forms, não no site. Uma sugestão de
+perguntas, mantendo-o anônimo:
+
+1. "Você aprendeu algo novo?": Sim / Mais ou menos / Não
+2. "Quer receber mais informativos?": Sim / Não
+3. Opcional, texto livre: "O que você aprendeu?" (com o aviso de não escrever nomes nem
+   dados pessoais)
+
+### Planilha de campo
+
+Sugestão de planilha **privada** (ela guarda dados de campo, então não faz parte deste
+repositório), com as abas: *Entrevistas*, *Informativos* (código, local, datas, status e o
+endereço do QR), *Quiz por pergunta* e *Resumo mensal*. Não registre nome, telefone nem
+CPF de entrevistados.
 
 ## 🤖 Construção e desenvolvimento
 
