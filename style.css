@@ -366,9 +366,13 @@ html.modo-acessivel {
   --color-text: #000000;
 }
 
+/* Guia impresso: no máximo 2 páginas A4 (golpes em 2 colunas + sinais + "caí em um golpe").
+   Sem depender de fundos coloridos: o navegador costuma desligar "gráficos de plano de
+   fundo" na impressão, então o que antes era texto branco sobre verde vira contorno. */
 @media print {
   @page {
-    margin: 1.2cm;
+    size: A4;
+    margin: 1cm;
   }
 
   .a11y-toggle,
@@ -378,59 +382,163 @@ html.modo-acessivel {
   #quiz,
   #resultado,
   #feedback,
+  #relato,
   footer {
     display: none !important;
   }
 
-  /* Scales every rem-based size/spacing on the page down together, so the
-     whole printed guide (title + 3 cards) fits on a single sheet. */
-  html {
-    font-size: 92%;
+  html,
+  html.modo-acessivel {
+    font-size: 100%;
   }
 
   body {
     background: #ffffff;
     color: #000000;
+    font-size: 9pt;
+    line-height: 1.35;
+  }
+
+  h2 {
+    break-after: avoid;
   }
 
   #hero {
-    padding: 0 0 0.6cm;
+    padding: 0 0 0.35cm;
   }
 
-  #golpes {
-    padding: 0;
+  #hero h1 {
+    font-size: 20pt;
+    line-height: 1.15;
+    margin-bottom: 0.15cm;
+  }
+
+  #hero p {
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+
+  #golpes,
+  #sinais,
+  #ajuda-golpe {
+    max-width: none;
+    padding: 0.35cm 0 0;
+  }
+
+  #sinais {
+    break-before: page;
+    padding-top: 0;
   }
 
   #golpes > div:first-child {
-    margin-bottom: 0.5cm;
+    margin-bottom: 0.3cm;
   }
 
-  #golpes h2 {
-    margin-bottom: 0.1cm;
+  #golpes h2,
+  #sinais h2,
+  #ajuda-golpe h2 {
+    font-size: 15pt;
+    line-height: 1.2;
+    margin-bottom: 0.15cm;
   }
 
+  #sinais > p:not(.sinais-destaque),
+  #ajuda-golpe > p {
+    font-size: 10pt;
+    line-height: 1.3;
+    margin-bottom: 0.25cm;
+  }
+
+  /* Os 8 cards em 2 colunas */
   #golpes .flex-col {
-    gap: 0.4cm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3cm;
   }
 
   #golpes article {
     background: #ffffff;
-    border-width: 1px;
-    border-color: #cccccc;
+    border: 1px solid #bbbbbb;
+    border-radius: 0.2cm;
+    box-shadow: none;
+    padding: 0.25cm;
     break-inside: avoid;
-    padding: 0.4cm;
+  }
+
+  #golpes article .flex {
+    margin-bottom: 0.1cm;
   }
 
   #golpes article svg {
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
   }
 
   #golpes article h3 {
-    margin-bottom: 0.15cm;
+    font-size: 11.5pt;
+    line-height: 1.2;
+    margin-bottom: 0.1cm;
+  }
+
+  #golpes article p {
+    font-size: 9.5pt;
+    line-height: 1.35;
   }
 
   .golpe-alerta-badge {
     display: none;
+  }
+
+  /* Sinais e passos: listas compactas, sem fundo nem sombra */
+  .lista-cards {
+    gap: 0.15cm;
+  }
+
+  .lista-cards li {
+    background: none;
+    box-shadow: none;
+    border: 1px solid #cccccc;
+    border-radius: 0.15cm;
+    padding: 0.18cm 0.3cm;
+    font-size: 10.5pt;
+    line-height: 1.35;
+    break-inside: avoid;
+  }
+
+  .lista-cards.sinais li {
+    padding-left: 0.7cm;
+  }
+
+  .lista-cards.sinais li::before {
+    left: 0.3cm;
+    top: 0.34cm;
+    width: 0.22cm;
+    height: 0.22cm;
+    background: none;
+    border: 1.5px solid #000000;
+  }
+
+  .lista-cards.passos li {
+    gap: 0.25cm;
+  }
+
+  .lista-cards.passos li::before {
+    width: 0.65cm;
+    height: 0.65cm;
+    background: none;
+    color: #000000;
+    border: 1.5px solid #000000;
+    font-size: 10pt;
+  }
+
+  .sinais-destaque {
+    margin-top: 0.25cm;
+    padding: 0.2cm;
+    background: none;
+    color: #000000;
+    border: 2px solid #000000;
+    font-size: 14pt;
+    line-height: 1.2;
+    break-inside: avoid;
   }
 }
