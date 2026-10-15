@@ -4,7 +4,7 @@
 
 ### Um guia interativo que ensina qualquer pessoa a reconhecer golpes digitais em poucos minutos
 
-[![Acessar o site](https://img.shields.io/badge/🌐_Acessar_o_site-2C5F5A?style=for-the-badge)](https://marceladrumond.github.io/seguranca-digital-idosos/)
+[![Acessar o site](https://img.shields.io/badge/🌐_Acessar_o_site-2C5F5A?style=for-the-badge)](https://marceladrumond.github.io/seguranca-digital/)
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
@@ -72,7 +72,7 @@ de hospedagem.
 
 ## 🔗 Acesse
 
-**[marceladrumond.github.io/seguranca-digital-idosos](https://marceladrumond.github.io/seguranca-digital-idosos/)**
+**[marceladrumond.github.io/seguranca-digital](https://marceladrumond.github.io/seguranca-digital/)**
 
 ## 🛠️ Tecnologias
 
@@ -92,8 +92,8 @@ Propositalmente simples — sem framework, sem build step, sem `npm install`:
 Não precisa instalar nada:
 
 ```bash
-git clone https://github.com/MarcelaDrumond/seguranca-digital-idosos.git
-cd seguranca-digital-idosos
+git clone https://github.com/MarcelaDrumond/seguranca-digital.git
+cd seguranca-digital
 python -m http.server 8000
 ```
 
@@ -103,7 +103,7 @@ navegador.
 ## 📁 Estrutura do projeto
 
 ```
-seguranca-digital-idosos/
+seguranca-digital/
 ├── index.html      # conteúdo e estrutura da página
 ├── style.css       # design tokens, utilitários e CSS de impressão
 ├── script.js       # lógica do quiz e das funcionalidades extras
