@@ -67,8 +67,14 @@ Um **Projeto de Extensão** do curso de Análise e Desenvolvimento de Sistemas (
 - Exportação dos resultados do quiz em CSV
 - Compartilhamento direto com um familiar ou amigo pelo WhatsApp
 
+**Para quem organiza o projeto**
+- Contador de visitas opcional no rodapé e contagem anônima de quizzes concluídos, com o
+  [GoatCounter](https://www.goatcounter.com) — sem cookies e sem dados pessoais (veja
+  [Configuração](#️-configuração))
+
 Tudo isso rodando **100% no navegador** — sem servidor, sem banco de dados, sem custo
-de hospedagem.
+de hospedagem. As estatísticas do GoatCounter são opcionais: sem configurá-las, a página
+não carrega nenhum script externo além das fontes.
 
 ## 🔗 Acesse
 
@@ -85,6 +91,7 @@ Propositalmente simples — sem framework, sem build step, sem `npm install`:
 | **Interatividade** | JavaScript puro (vanilla, ES2017+) |
 | **Fontes** | Google Fonts (Inter + Manrope) |
 | **Voz** | Web Speech API, nativa do navegador |
+| **Estatísticas** | GoatCounter, opcional e sem cookies |
 | **Hospedagem** | GitHub Pages |
 
 ## 🚀 Rodando localmente
@@ -113,13 +120,14 @@ seguranca-digital/
 
 ## ⚙️ Configuração
 
-O site usa dois formulários do Google Forms, embutidos via iframe. Cada um é controlado
-por uma constante no topo do `script.js`:
+O site usa dois formulários do Google Forms, embutidos via iframe, e, opcionalmente, o
+GoatCounter para estatísticas. Tudo é controlado por constantes no topo do `script.js`:
 
 | Constante | Para que serve | Estado padrão |
 |---|---|---|
 | `GOOGLE_FORM_URL` | Feedback pós-quiz ("Isso te ajudou?"), exibido depois do resultado | **Configurado e ativo** |
 | `GOOGLE_FORM_RELATO_URL` | Relato anônimo ("Conhece alguém que já caiu em um golpe?") | Vazio — a seção fica oculta |
+| `GOATCOUNTER_CODE` | Contador de visitas e contagem de quizzes concluídos | Vazio — nada é carregado nem exibido |
 
 Para usar o seu próprio formulário, abra-o no Google Forms → **Enviar** → aba `<>` →
 copie a URL do atributo `src` (ela termina em `/viewform?embedded=true`) e cole na
@@ -141,6 +149,30 @@ seguro. Ao criar o formulário do relato:
 
 A página já exibe, acima do formulário, o aviso: *"Não escreva nomes, telefones, CPF,
 números de conta ou senhas; conte só como o golpe chegou e o que a pessoa fez."*
+
+### Visitas e quizzes concluídos (GoatCounter, opcional)
+
+O [GoatCounter](https://www.goatcounter.com) é um serviço gratuito de estatísticas que
+não usa cookies e não guarda dados pessoais nem o IP completo. Para ativar:
+
+1. Crie uma conta em goatcounter.com e escolha o **código do site**, o trecho que vem
+   antes de `.goatcounter.com` (por exemplo, `meusite` para `meusite.goatcounter.com`).
+2. Cole esse código na constante `GOATCOUNTER_CODE` do `script.js`.
+3. Nas configurações do site no GoatCounter (**Settings**), ative **Allow adding visitor
+   counts on your website**. Essa opção vem desligada; sem ela o número não aparece no
+   rodapé.
+
+O que passa a acontecer:
+
+- Cada visita é contada, e o rodapé mostra "N visitas ao site". O número não é em tempo
+  real: o GoatCounter guarda a resposta em cache por algumas horas. Se o contador falhar
+  (ou ainda não houver visitas), o rodapé simplesmente não mostra nada.
+- Cada quiz concluído vira um evento anônimo chamado `quiz-concluido`, que aparece só no
+  painel do GoatCounter. Nenhuma pontuação nem dado da pessoa é enviado.
+- As respostas dos formulários não passam pelo GoatCounter: você as vê na aba
+  **Respostas** de cada Google Form.
+
+Se a constante ficar vazia, nenhum script externo é carregado e o rodapé não muda.
 
 ## 🤖 Construção e desenvolvimento
 

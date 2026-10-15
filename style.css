@@ -323,6 +323,12 @@ button:focus-visible,
   line-height: 2rem;
 }
 
+/* Contador de visitas do rodapé (só aparece quando o GoatCounter está configurado) */
+#contador-visitas {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
 /* Aviso de privacidade do formulário de relato */
 .aviso-privacidade {
   display: flex;

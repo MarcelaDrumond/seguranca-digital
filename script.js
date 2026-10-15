@@ -143,6 +143,13 @@ const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScNQ84nR5Y7m5t
 // O formulário deve ser ANÔNIMO (sem coletar e-mail e sem exigir login do Google).
 const GOOGLE_FORM_RELATO_URL = '';
 
+// Estatísticas anônimas com o GoatCounter (opcional): cole só o CÓDIGO do site, o trecho antes de
+// ".goatcounter.com" (ex.: 'meusite' para meusite.goatcounter.com). Não usa cookies nem guarda dados
+// pessoais. Se ficar vazio, nenhum script externo é carregado e o contador de visitas fica escondido.
+// Para o número aparecer no rodapé, ative "Allow adding visitor counts on your website" nas
+// configurações do site no GoatCounter.
+const GOATCOUNTER_CODE = '';
+
 let perguntaAtual = 0;
 let pontuacao = 0;
 let alternativaSelecionada = null;
@@ -331,12 +338,54 @@ function mostrarFormulario(secaoId, containerId, url, titulo) {
   secao.hidden = false;
 }
 
+// Carrega o GoatCounter e, quando ele estiver pronto, mostra o número de visitas no rodapé.
+// Se a constante estiver vazia ou inválida, não faz nada.
+function iniciarEstatisticas(codigo) {
+  codigo = (codigo || '').trim();
+  if (!codigo) return;
+  if (!/^[a-z0-9-]+$/i.test(codigo)) {
+    console.warn('GOATCOUNTER_CODE deve ter só letras, números e hífen (o trecho antes de ".goatcounter.com"). Recebido:', codigo);
+    return;
+  }
+  const base = `https://${codigo}.goatcounter.com`;
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://gc.zgo.at/count.js';
+  script.dataset.goatcounter = `${base}/count`;
+  script.addEventListener('load', () => mostrarContadorVisitas(base));
+  document.head.appendChild(script);
+}
+
+// Usa o contador da própria página (e não o "TOTAL" do site, que também soma os eventos do quiz).
+// Qualquer falha (contador desativado, sem rede, página ainda sem visitas) mantém o rodapé como está.
+async function mostrarContadorVisitas(base) {
+  try {
+    const dados = window.goatcounter && window.goatcounter.get_data ? window.goatcounter.get_data() : null;
+    const caminho = (dados && dados.p) || window.location.pathname;
+    const resposta = await fetch(`${base}/counter/${encodeURIComponent(caminho)}.json`);
+    if (!resposta.ok) return;
+    const { count } = await resposta.json();
+    if (!count) return;
+    const contador = document.getElementById('contador-visitas');
+    contador.textContent = `${count} ${count === '1' ? 'visita' : 'visitas'} ao site`;
+    contador.hidden = false;
+  } catch (e) {}
+}
+
+// Conta, de forma anônima (só +1, sem pontuação nem dados da pessoa), quantos quizzes foram concluídos.
+function contarQuizConcluido() {
+  if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+    window.goatcounter.count({ path: 'quiz-concluido', title: 'Quiz concluído', event: true });
+  }
+}
+
 function mostrarResultado() {
   document.getElementById('quiz').hidden = true;
   const resultado = document.getElementById('resultado');
   resultado.hidden = false;
   document.getElementById('resultado-mensagem').textContent = getMensagemResultado(pontuacao);
   salvarResultadoLocalStorage();
+  contarQuizConcluido();
   mostrarFormulario('feedback', 'feedback-iframe-container', GOOGLE_FORM_URL, 'Formulário de feedback');
   rolarPara(resultado, document.querySelector('#resultado h2'));
 }
@@ -357,6 +406,7 @@ document.getElementById('quiz-refazer').addEventListener('click', reiniciarQuiz)
 document.getElementById('quiz-total-perguntas').textContent = quizQuestions.length;
 renderPergunta();
 mostrarFormulario('relato', 'relato-iframe-container', GOOGLE_FORM_RELATO_URL, 'Formulário anônimo para relatar um golpe');
+iniciarEstatisticas(GOATCOUNTER_CODE);
 
 // Modo acessibilidade (texto grande + alto contraste)
 const toggleAcessibilidade = document.getElementById('toggle-acessibilidade');
