@@ -280,6 +280,14 @@ function avaliarResposta() {
 function confirmarResposta() {
   if (alternativaSelecionada === null || respondida) return;
   avaliarResposta();
+  // Só a primeira tentativa entra nas estatísticas: quem erra e refaz já aprendeu com o
+  // feedback, então a nova resposta não mede o que a pessoa sabia antes. A pontuação mostrada
+  // na tela continua contando o acerto final.
+  const acertouDePrimeira = isRespostaCorreta(perguntaAtual, alternativaSelecionada);
+  registrarEvento(
+    `pergunta-${perguntaAtual + 1}-${acertouDePrimeira ? 'acerto' : 'erro'}`,
+    quizQuestions[perguntaAtual].tema
+  );
 }
 
 document.getElementById('quiz-botao-acao').addEventListener('click', () => {
@@ -338,6 +346,13 @@ function mostrarFormulario(secaoId, containerId, url, titulo) {
   secao.hidden = false;
 }
 
+// Caminho da página sem parâmetros (?utm_campaign=...) e sem "index.html": todas as visitas,
+// inclusive as que chegam pelo QR, contam na mesma página. A campanha do QR continua sendo
+// registrada à parte pelo GoatCounter (ele a lê do endereço, não deste caminho).
+function caminhoDaPagina() {
+  return window.location.pathname.replace(/index\.html$/, '') || '/';
+}
+
 // Carrega o GoatCounter e, quando ele estiver pronto, mostra o número de visitas no rodapé.
 // Se a constante estiver vazia ou inválida, não faz nada.
 function iniciarEstatisticas(codigo) {
@@ -348,6 +363,7 @@ function iniciarEstatisticas(codigo) {
     return;
   }
   const base = `https://${codigo}.goatcounter.com`;
+  window.goatcounter = { path: caminhoDaPagina() };
   const script = document.createElement('script');
   script.async = true;
   script.src = 'https://gc.zgo.at/count.js';
@@ -360,9 +376,7 @@ function iniciarEstatisticas(codigo) {
 // Qualquer falha (contador desativado, sem rede, página ainda sem visitas) mantém o rodapé como está.
 async function mostrarContadorVisitas(base) {
   try {
-    const dados = window.goatcounter && window.goatcounter.get_data ? window.goatcounter.get_data() : null;
-    const caminho = (dados && dados.p) || window.location.pathname;
-    const resposta = await fetch(`${base}/counter/${encodeURIComponent(caminho)}.json`);
+    const resposta = await fetch(`${base}/counter/${encodeURIComponent(caminhoDaPagina())}.json`);
     if (!resposta.ok) return;
     const { count } = await resposta.json();
     if (!count) return;
@@ -372,10 +386,11 @@ async function mostrarContadorVisitas(base) {
   } catch (e) {}
 }
 
-// Conta, de forma anônima (só +1, sem pontuação nem dados da pessoa), quantos quizzes foram concluídos.
-function contarQuizConcluido() {
+// Registra um evento anônimo no GoatCounter (só +1 no nome do evento, nada sobre a pessoa).
+// Sem o GoatCounter configurado, ou enquanto ele ainda carrega, não faz nada.
+function registrarEvento(nome, titulo) {
   if (window.goatcounter && typeof window.goatcounter.count === 'function') {
-    window.goatcounter.count({ path: 'quiz-concluido', title: 'Quiz concluído', event: true });
+    window.goatcounter.count({ path: nome, title: titulo, event: true });
   }
 }
 
@@ -385,7 +400,7 @@ function mostrarResultado() {
   resultado.hidden = false;
   document.getElementById('resultado-mensagem').textContent = getMensagemResultado(pontuacao);
   salvarResultadoLocalStorage();
-  contarQuizConcluido();
+  registrarEvento('quiz-concluido', 'Quiz concluído');
   mostrarFormulario('feedback', 'feedback-iframe-container', GOOGLE_FORM_URL, 'Formulário de feedback');
   rolarPara(resultado, document.querySelector('#resultado h2'));
 }
@@ -501,4 +516,7 @@ document.getElementById('btn-imprimir').addEventListener('click', () => {
 // Compartilhar no WhatsApp
 const linkCompartilhar = document.getElementById('whatsapp-compartilhar');
 const mensagemCompartilhar = 'Olha esse guia rápido para reconhecer os golpes digitais mais comuns e não cair neles:';
-linkCompartilhar.href = `https://wa.me/?text=${encodeURIComponent(mensagemCompartilhar + ' ' + window.location.href)}`;
+// Compartilha o endereço limpo (sem ?utm_campaign=... do QR nem #âncora), para que quem entrar
+// pelo link do WhatsApp não seja contado como acesso vindo do QR.
+const enderecoLimpo = window.location.href.split(/[?#]/)[0];
+linkCompartilhar.href = `https://wa.me/?text=${encodeURIComponent(mensagemCompartilhar + ' ' + enderecoLimpo)}`;
