@@ -380,5 +380,5 @@ document.getElementById('btn-imprimir').addEventListener('click', () => {
 
 // Compartilhar no WhatsApp
 const linkCompartilhar = document.getElementById('whatsapp-compartilhar');
-const mensagemCompartilhar = 'Olha esse guia rápido sobre como se proteger de golpes digitais (Pix, WhatsApp clonado e links falsos):';
+const mensagemCompartilhar = 'Olha esse guia rápido para reconhecer os golpes digitais mais comuns e não cair neles:';
 linkCompartilhar.href = `https://wa.me/?text=${encodeURIComponent(mensagemCompartilhar + ' ' + window.location.href)}`;
