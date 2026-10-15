@@ -248,6 +248,80 @@ button:focus-visible,
   color: #ffffff;
 }
 
+/* Listas em cartões: "Sinais que se repetem" (marcador) e "Caí em um golpe" (passos numerados) */
+.lista-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lista-cards li {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.lista-cards.sinais li {
+  position: relative;
+  padding-left: 2.75rem;
+}
+
+.lista-cards.sinais li::before {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  top: 1.45rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+}
+
+.lista-cards.passos {
+  counter-reset: passo;
+}
+
+.lista-cards.passos li {
+  counter-increment: passo;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+}
+
+.lista-cards.passos li::before {
+  content: counter(passo);
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
+
+.sinais-destaque {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background-color: var(--color-accent);
+  color: #ffffff;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 /* Fixed accessibility toggle ("Aa") */
 .a11y-toggle {
   position: fixed;
