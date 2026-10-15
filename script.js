@@ -21,6 +21,9 @@ function rolarPara(elemento, elementoParaFocar) {
   });
 }
 
+// Cada pergunta: `correta` é o índice da alternativa certa (0 = a, 1 = b, ...) e
+// `feedbackAlternativas` tem uma explicação específica para cada alternativa errada
+// (null na posição da certa). A posição da certa varia de propósito entre as perguntas.
 const quizQuestions = [
   {
     tema: 'Golpe do Pix',
@@ -41,39 +44,93 @@ const quizQuestions = [
     ]
   },
   {
-    tema: 'WhatsApp Clonado',
+    tema: 'WhatsApp clonado',
     enunciado: 'Um "parente" te chama no WhatsApp pedindo dinheiro urgente de um número novo. O que fazer primeiro?',
     alternativas: [
       'Fazer o Pix rápido, pois é urgência.',
-      'Ligar para o parente no número antigo para confirmar.',
       'Perguntar por mensagem se é ele mesmo.',
-      'Ignorar e apagar a conversa.'
+      'Ignorar e apagar a conversa.',
+      'Ligar para o parente no número antigo para confirmar.'
     ],
-    correta: 1,
+    correta: 3,
     feedback: 'Os golpistas usam a urgência para você não pensar. Sempre faça uma ligação normal (não pelo WhatsApp) para o número antigo da pessoa para confirmar a história.',
     feedbackAlternativas: [
       'Perigo! Os golpistas usam a falsa urgência para fazer você agir sem pensar. Nunca transfira dinheiro sem confirmar por ligação de voz.',
-      null,
       'Não adianta perguntar por mensagem, pois o golpista que roubou a conta vai fingir ser o seu familiar e continuar mentindo. A única prova real é ouvir a voz da pessoa.',
-      'Apagar ajuda a evitar o golpe, mas se o seu parente teve a conta clonada de verdade, ele precisa saber disso para avisar os outros contatos.'
+      'Apagar ajuda a evitar o golpe, mas se o seu parente teve a conta clonada de verdade, ele precisa saber disso para avisar os outros contatos.',
+      null
     ]
   },
   {
-    tema: 'Link Falso / Phishing',
+    tema: 'Links falsos',
     enunciado: 'Você ganhou um "prêmio" inesperado e recebeu um link para "resgatar". O que isso geralmente indica?',
     alternativas: [
-      'Promoção verdadeira de loja conhecida.',
       'Golpe para roubar dados pessoais ou bancários.',
+      'Promoção verdadeira de loja conhecida.',
       'Mensagem de cobrança.',
       'Atualização do aplicativo.'
     ],
-    correta: 1,
+    correta: 0,
     feedback: 'Se você não se inscreveu em nada, não existe prêmio! Golpistas enviam links falsos prometendo brindes para roubar suas senhas e dinheiro. Nunca clique.',
     feedbackAlternativas: [
-      'Infelizmente não! Se você não se inscreveu em nenhum sorteio oficial, prêmios inesperados na internet são sempre iscas para roubar dados.',
       null,
+      'Infelizmente não! Se você não se inscreveu em nenhum sorteio oficial, prêmios inesperados na internet são sempre iscas para roubar dados.',
       "Não é cobrança, é uma técnica clássica de engenharia social chamada 'falsa promessa' para atrair a curiosidade da vítima.",
-      'Atualizações de aplicativos legítimos nunca são enviadas por links de brindes ou prêmios. Elas são feitas direto pelas lojas oficiais do celular (Google Play ou App Store).'
+      'Atualizações de aplicativos legítimos nunca são enviadas por links de brindes ou prêmios. Elas são feitas direto pela loja oficial de aplicativos do celular.'
+    ]
+  },
+  {
+    tema: 'Falsa central',
+    enunciado: 'Alguém liga dizendo ser do seu banco e pede o código que acabou de chegar por SMS. O que fazer?',
+    alternativas: [
+      'Passar o código, para resolver logo o problema.',
+      'Pedir para a pessoa confirmar o seu CPF antes.',
+      'Desligar e ligar você mesmo para o número oficial do banco.',
+      'Dizer que vai pensar e ligar de volta no número que ela passar.'
+    ],
+    correta: 2,
+    feedback: 'Banco de verdade nunca pede senha, código nem transferência por telefone. Na dúvida, desligue e ligue você mesmo para o número oficial, o que está no verso do seu cartão.',
+    feedbackAlternativas: [
+      'Nunca passe esse código! Com ele, o golpista entra na sua conta ou faz transferências em seu nome. Banco de verdade jamais pede código por telefone.',
+      'Esse tipo de golpista já tem seus dados (nome, CPF, às vezes até o endereço), então conferir isso não prova nada. Quem liga nunca é a prova: a prova é o número oficial que você mesmo disca.',
+      null,
+      'O número que ela passa é do próprio golpista, e quem atender vai continuar fingindo ser do banco. Ligue sempre para o número do verso do seu cartão ou do aplicativo oficial.'
+    ]
+  },
+  {
+    tema: 'Investimento milagroso',
+    enunciado: 'Chega uma mensagem: "Invista R$ 500 e receba R$ 1.500 em uma semana, lucro garantido!". O que isso provavelmente é?',
+    alternativas: [
+      'Uma ótima oportunidade, pois o lucro é garantido.',
+      'Um investimento seguro se for só um valor pequeno.',
+      'Uma promoção real, se aparecer um famoso recomendando.',
+      'Um golpe: lucro alto e garantido não existe.'
+    ],
+    correta: 3,
+    feedback: 'Todo investimento de verdade tem risco, e ninguém consegue prometer ganho certo. Na dúvida, não deposite nada e converse com alguém de confiança antes de decidir.',
+    feedbackAlternativas: [
+      'Cuidado! Quando alguém garante lucro alto, quase sempre é golpe. Todo investimento de verdade tem risco, e ninguém consegue prometer ganho certo.',
+      'O valor pequeno é só a isca: o golpista deixa você "lucrar" no começo para ganhar confiança e depois pedir quantias bem maiores. O problema não é o tamanho do valor, é a promessa.',
+      'Vídeos e fotos de famosos recomendando investimento muitas vezes são falsos, criados com inteligência artificial. Famoso falando não é garantia de nada.',
+      null
+    ]
+  },
+  {
+    tema: 'Compras e vendas falsas',
+    enunciado: 'Você vendeu um produto e o comprador manda um comprovante de Pix, pedindo para você enviar logo. O que fazer?',
+    alternativas: [
+      'Conferir no aplicativo do seu banco se o dinheiro entrou.',
+      'Enviar o produto, pois o comprovante prova que ele pagou.',
+      'Enviar rápido, para o comprador não desistir.',
+      'Pedir um segundo comprovante para garantir.'
+    ],
+    correta: 0,
+    feedback: 'Comprovante é só uma imagem, e pode ser falso. Só entregue o produto depois de ver o dinheiro na sua conta, no aplicativo do banco.',
+    feedbackAlternativas: [
+      null,
+      'Comprovante pode ser falso ou editado em segundos. O que vale como prova é o dinheiro aparecendo na sua conta, no aplicativo do banco.',
+      'A pressa é uma armadilha clássica: quem quer enganar sempre apressa. Uma compra de verdade espera o tempo que for preciso para você conferir.',
+      'Um segundo comprovante pode ser tão falso quanto o primeiro. O único jeito de ter certeza é ver o dinheiro na sua conta.'
     ]
   }
 ];
@@ -286,6 +343,7 @@ function reiniciarQuiz() {
 
 document.getElementById('quiz-refazer').addEventListener('click', reiniciarQuiz);
 
+document.getElementById('quiz-total-perguntas').textContent = quizQuestions.length;
 renderPergunta();
 
 // Modo acessibilidade (texto grande + alto contraste)
