@@ -69,7 +69,7 @@ Um **Projeto de Extensão** do curso de Análise e Desenvolvimento de Sistemas (
 
 **Para quem organiza o projeto**
 - Contador de visitas opcional no rodapé, contagem anônima de quizzes concluídos e de
-  acertos por pergunta, e acessos por QR separados por informativo, com o
+  acertos por pergunta, e acessos pelo QR separados dos demais, com o
   [GoatCounter](https://www.goatcounter.com) — sem cookies e sem dados pessoais (veja
   [Configuração](#️-configuração) e [Indicadores](#-indicadores-do-projeto))
 
@@ -128,7 +128,7 @@ GoatCounter para estatísticas. Tudo é controlado por constantes no topo do `sc
 |---|---|---|
 | `GOOGLE_FORM_URL` | Feedback pós-quiz ("Isso te ajudou?"), exibido depois do resultado | **Configurado e ativo** |
 | `GOOGLE_FORM_RELATO_URL` | Relato anônimo ("Conhece alguém que já caiu em um golpe?") | Vazio — a seção fica oculta |
-| `GOATCOUNTER_CODE` | Contador de visitas e contagem de quizzes concluídos | Vazio — nada é carregado nem exibido |
+| `GOATCOUNTER_CODE` | Contador de visitas, quizzes concluídos e acertos por pergunta | **Configurado e ativo** (`seguranca-digital`). Vazio, nada é carregado nem exibido |
 
 Para usar o seu próprio formulário, abra-o no Google Forms → **Enviar** → aba `<>` →
 copie a URL do atributo `src` (ela termina em `/viewform?embedded=true`) e cole na
@@ -184,28 +184,30 @@ acontece no site vem do GoatCounter e do formulário de feedback:
 | Indicador | Onde medir | Como |
 |---|---|---|
 | Entrevistas | Planilha | Uma linha por entrevista (data, local, perfil, resumo) |
-| Informativos instalados | Planilha | Um código por informativo (INF-01, INF-02…) e a data de instalação |
+| Informativos instalados | Planilha | Uma linha por informativo (código, local, data de instalação) |
 | Visitas ao site | GoatCounter | Total de visitas no painel (e no rodapé da página) |
-| Acessos pelo QR | GoatCounter | Um QR com endereço próprio para cada informativo (abaixo) |
+| Acessos pelo QR | GoatCounter | O QR aponta para um endereço marcado (abaixo) |
 | Quizzes concluídos | GoatCounter | Evento `quiz-concluido` |
 | Acertos no quiz | GoatCounter | Eventos `pergunta-N-acerto` e `pergunta-N-erro` (abaixo) |
 | "Aprendi algo novo" | Formulário de feedback | Pergunta no Google Forms (abaixo) |
 
-### Um QR para cada informativo
+### O QR Code
 
-Cada QR deve apontar para o endereço do site com o código do informativo:
+O QR deve apontar para o endereço do site com a marcação do informativo:
 
 ```
-https://marceladrumond.github.io/seguranca-digital/?utm_campaign=INF-01&utm_source=qr
+https://marceladrumond.github.io/seguranca-digital/?utm_campaign=informativo&utm_source=qr
 ```
 
-Troque `INF-01` pelo código de cada informativo. No painel do GoatCounter, o widget de
-campanhas (**Campaigns**) mostra quantos acessos veio de cada um.
+No painel do GoatCounter, o acesso aparece na campanha **informativo** (widget
+**Campaigns**) e com a origem **QR** (widget **Top referrers**). Assim os acessos pelo QR
+ficam separados dos que chegam pelo link do WhatsApp ou digitando o endereço. Se mais
+tarde houver QR diferentes (um por local, por exemplo), basta trocar `informativo` por um
+nome para cada um.
 
-- **Defina os endereços antes de imprimir.** Um QR já impresso com o endereço simples não
+- **Defina o endereço antes de imprimir.** Um QR já impresso com o endereço simples não
   dá para separar depois.
-- Teste o endereço com um acesso seu e confira se a campanha aparece no painel antes de
-  mandar imprimir.
+- O painel pode levar alguns segundos para mostrar um acesso novo.
 - O botão de WhatsApp sempre compartilha o endereço **sem** esses parâmetros, para que
   quem entra pelo link compartilhado não seja contado como acesso de QR.
 - O site registra todas as visitas na mesma página, com ou sem parâmetros, então o
@@ -233,9 +235,9 @@ perguntas, mantendo-o anônimo:
 ### Planilha de campo
 
 Sugestão de planilha **privada** (ela guarda dados de campo, então não faz parte deste
-repositório), com as abas: *Entrevistas*, *Informativos* (código, local, datas, status e o
-endereço do QR), *Quiz por pergunta* e *Resumo mensal*. Não registre nome, telefone nem
-CPF de entrevistados.
+repositório), com as abas: *Entrevistas*, *Informativos* (código, local, datas e status),
+*Quiz por pergunta* e *Resumo mensal*. Não registre nome, telefone nem CPF de
+entrevistados.
 
 ## 🤖 Construção e desenvolvimento
 

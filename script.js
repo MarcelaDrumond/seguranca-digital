@@ -148,7 +148,7 @@ const GOOGLE_FORM_RELATO_URL = '';
 // pessoais. Se ficar vazio, nenhum script externo é carregado e o contador de visitas fica escondido.
 // Para o número aparecer no rodapé, ative "Allow adding visitor counts on your website" nas
 // configurações do site no GoatCounter.
-const GOATCOUNTER_CODE = '';
+const GOATCOUNTER_CODE = 'seguranca-digital';
 
 let perguntaAtual = 0;
 let pontuacao = 0;
