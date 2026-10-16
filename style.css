@@ -133,7 +133,7 @@ button:focus-visible,
 /* Logo do rodapé: altura fixa, largura proporcional; object-fit garante que um logo de
    outra proporção nunca fique esticado/achatado (mesmo se max-width limitar a largura). */
 .logo-rodape {
-  height: 8rem;
+  height: 10rem;
   width: auto;
   max-width: 100%;
   object-fit: contain;
